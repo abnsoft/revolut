@@ -14,11 +14,14 @@ package revolut.domain;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * 
  * @since 2017.04.01
  * @author annik
  */
+@XmlRootElement
 public class User {
 
     private Integer id;
@@ -26,6 +29,12 @@ public class User {
     private String name;
 
     private BigDecimal money = new BigDecimal( "0.0" );
+
+    /**
+     * Contructor. Needs for JAXB.
+     */
+    public User() {
+    }
 
     /**
      * Getter.

@@ -14,7 +14,14 @@ package revolut.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import revolut.domain.User;
+import revolut.domain.UserService;
 
 /**
  * 
@@ -25,9 +32,19 @@ import javax.ws.rs.Produces;
 public class RestUser {
 
     @GET
-    @Produces( {"application/json"} )
-    public String handleUser() {
+    @Path( "{userId}" )
+    @Produces( MediaType.APPLICATION_JSON )
+    public User handleUser( @PathParam( "userId" ) Integer userId ) {
 
-        return "OK";
+        UserService userService = new UserService();
+
+        // find user with userId
+        User user = userService.find( userId );
+        if ( user != null ) {
+
+        } else {
+            throw new WebApplicationException( "User not found", Response.Status.NOT_FOUND );
+        }
+        return user;
     }
 }

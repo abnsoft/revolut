@@ -13,6 +13,7 @@
 package revolut.rest;
 
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -35,7 +36,9 @@ public class RestUserTest extends JerseyTest {
     @Test
     public void name() {
 
-        String response = target( "/user" ).request().get( String.class );
-        Assert.assertTrue( "User info responce.", "OK".equals( response ) );
+        Response response = target( "/user/-1" ).request().get();
+
+        Assert.assertTrue( "User info responce NOT FOUDN.",
+                Response.Status.NOT_FOUND.getStatusCode() == response.getStatus() );
     }
 }

@@ -34,7 +34,9 @@ public class Main {
         server.setHandler( context );
 
         ServletHolder h = new ServletHolder( new ServletContainer() );
-        h.setInitParameter( "jersey.config.server.provider.packages", "revolut.rest" );
+        h.setInitParameter( "jersey.config.server.provider.packages",
+                "org.codehaus.jackson.jaxrs;revolut.rest" );
+        h.setInitParameter( "jersey.api.json.POJOMappingFeature", "true" );
 
         context.addServlet( h, "/*" );
 
