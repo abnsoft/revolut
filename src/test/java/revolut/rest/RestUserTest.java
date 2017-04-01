@@ -12,6 +12,10 @@
  */
 package revolut.rest;
 
+import javax.ws.rs.core.Application;
+
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,12 +24,18 @@ import org.junit.Test;
  * @since 2017.04.01
  * @author annik
  */
-public class RestUserTest extends RevolutTest {
+public class RestUserTest extends JerseyTest {
+
+    @Override
+    protected Application configure() {
+
+        return new ResourceConfig( RestUser.class );
+    }
 
     @Test
     public void name() {
 
-        String response = target( "/user/1" ).request().get( String.class );
+        String response = target( "/user" ).request().get( String.class );
         Assert.assertTrue( "User info responce.", "OK".equals( response ) );
     }
 }

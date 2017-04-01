@@ -12,23 +12,22 @@
  */
 package revolut.rest;
 
-import javax.ws.rs.core.Application;
-
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 /**
- * Class contains methods which are used in every test.
  * 
  * @since 2017.04.01
  * @author annik
  */
-public abstract class RevolutTest extends JerseyTest {
+@Path( "/user" )
+public class RestUser {
 
-    @Override
-    protected Application configure() {
+    @GET
+    @Produces( {"application/json"} )
+    public String handleUser() {
 
-        return new ResourceConfig( RestStatus.class );
+        return "OK";
     }
-
 }
