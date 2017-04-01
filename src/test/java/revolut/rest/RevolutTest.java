@@ -12,20 +12,23 @@
  */
 package revolut.rest;
 
-import org.junit.Assert;
-import org.junit.Test;
+import javax.ws.rs.core.Application;
+
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
 
 /**
+ * Class contains methods which are used in every test.
  * 
  * @since 2017.04.01
  * @author annik
  */
-public class RestStatusTest extends RevolutTest {
+public abstract class RevolutTest extends JerseyTest {
 
-    @Test
-    public void name() {
+    @Override
+    protected Application configure() {
 
-        String response = target( "/status" ).request().get( String.class );
-        Assert.assertTrue( "Status responce.", "OK".equals( response ) );
+        return new ResourceConfig( RestStatus.class );
     }
+
 }
