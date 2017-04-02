@@ -12,6 +12,8 @@
  */
 package revolut.rest;
 
+import java.math.BigDecimal;
+
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,7 +28,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 import revolut.Init;
+import revolut.domain.User;
 
 /**
  * 
@@ -49,8 +54,8 @@ public class RestUserTest extends JerseyTest {
         return new ResourceConfig( RestUser.class );
     }
 
+//    @Ignore
     @Test
-    @Ignore
     public void userNotFound() {
 
         Response response = target( "/user/-1" ).request().get();
@@ -59,8 +64,9 @@ public class RestUserTest extends JerseyTest {
                 Response.Status.NOT_FOUND.getStatusCode() == response.getStatus() );
     }
 
+//    @Ignore
     @Test
-    public void user1Found() {
+    public void user1FoundStatus() {
 
         Response response = target( "/user/1" ).request( MediaType.APPLICATION_JSON ).get();
 
@@ -69,8 +75,26 @@ public class RestUserTest extends JerseyTest {
         Assert.assertTrue( "Get User responce is OK.",
                 Response.Status.OK.getStatusCode() == response.getStatus() );
 
-//        Assert.assertTrue( "Get User responce is OK.",
-//                Response.Status.OK.getStatusCode() == response.getStatus() );
+    }
+
+    @Test
+    public void user1FoundJSON() {
+
+        String response = target( "/user/1" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+
+        LOG.debug( "Response={}", ReflectionToStringBuilder.toString( response ) );
+
+        Gson gson = new Gson();
+
+        User userJson = gson.fromJson( response, User.class );
+
+        Assert.assertTrue( "Get User ID.", userJson.getId() == 1 );
+        Assert.assertTrue( "Get User Name.", "Ivan1".equals( userJson.getName() ) );
+
+        String money = userJson.getMoney().setScale( 4 ).toString();
+        LOG.debug( "money=", money );
+        Assert.assertTrue( "Get User Money.", "1000.0000".equals( money ) );
+
     }
 
 }
