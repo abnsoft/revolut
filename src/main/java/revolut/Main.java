@@ -1,6 +1,8 @@
 package revolut;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -41,9 +43,18 @@ public class Main {
         context.addServlet( h, "/*" );
 
         try {
+            Class.forName( "org.h2.Driver" );
+            Connection conn =
+                    DriverManager.getConnection( "jdbc:h2:mem:revolut;DB_CLOSE_DELAY=-1", "sa", "" );
 
+            // initializing database.
+            Init.init();
+
+            // add application code here
             server.start();
             server.join();
+
+            conn.close();
 
         } catch (Exception e) {
             e.printStackTrace();

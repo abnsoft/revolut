@@ -1,8 +1,4 @@
 /**
- * Copyright 2017. ABN Software. All Rights reserved.<br>
- * <br>
- * Homepage .... http://www.ABNdev.com<br>
- * <br>
  * Project ..... RestTest<br>
  * <br>
  * Author ...... AnNik<br>
@@ -20,6 +16,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import revolut.domain.User;
 import revolut.domain.UserService;
 
@@ -31,6 +30,8 @@ import revolut.domain.UserService;
 @Path( "/user" )
 public class RestUser {
 
+    private static final Logger LOG = LoggerFactory.getLogger( RestUser.class );
+
     @GET
     @Path( "{userId}" )
     @Produces( MediaType.APPLICATION_JSON )
@@ -41,6 +42,7 @@ public class RestUser {
         // find user with userId
         User user = userService.find( userId );
         if ( user != null ) {
+            LOG.debug( "Found User={}", user );
 
         } else {
             throw new WebApplicationException( "User not found", Response.Status.NOT_FOUND );

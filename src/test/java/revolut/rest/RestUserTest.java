@@ -34,11 +34,13 @@ public class RestUserTest extends JerseyTest {
     }
 
     @Test
-    public void name() {
+    public void userNotFound() {
 
         Response response = target( "/user/-1" ).request().get();
 
         Assert.assertTrue( "User info responce NOT FOUDN.",
                 Response.Status.NOT_FOUND.getStatusCode() == response.getStatus() );
     }
+    
+    
 }

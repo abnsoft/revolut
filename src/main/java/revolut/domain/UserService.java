@@ -12,6 +12,12 @@
  */
 package revolut.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import revolut.dao.UserDAO;
+import revolut.exception.DAOException;
+
 /**
  * Service for {@link User}
  * 
@@ -19,6 +25,8 @@ package revolut.domain;
  * @author annik
  */
 public class UserService {
+
+    private static final Logger LOG = LoggerFactory.getLogger( UserService.class );
 
     /**
      * Find {@link User} by userId.
@@ -28,6 +36,31 @@ public class UserService {
      */
     public User find( Integer userId ) {
 
-        return null;
+        UserDAO userDao = new UserDAO();
+        User user = null;
+        try {
+            user = userDao.getUserById( userId );
+        } catch (DAOException e) {
+            LOG.error( "Read User[{}] failed.", userId );
+        }
+
+        return user;
     }
+
+    /**
+     * Persist user.
+     * 
+     * @param user
+     */
+    public void save( User user ) {
+
+        UserDAO userDao = new UserDAO();
+        try {
+            userDao.persistUser( user );
+
+        } catch (DAOException e) {
+            LOG.error( "Persisting the User failed. {}", user );
+        }
+    }
+
 }

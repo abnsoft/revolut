@@ -1,8 +1,4 @@
 /**
- * Copyright 2017. ABN Software. All Rights reserved.<br>
- * <br>
- * Homepage .... http://www.ABNdev.com<br>
- * <br>
  * Project ..... RestTest<br>
  * <br>
  * Author ...... AnNik<br>
@@ -12,8 +8,15 @@
  */
 package revolut.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,13 +25,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author annik
  */
 @XmlRootElement
-public class User {
+@Entity
+@Table( name = "user" )
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column
+    @GeneratedValue( strategy = GenerationType.AUTO )
     private Integer id;
 
+    @Column
     private String name;
 
-    private BigDecimal money = new BigDecimal( "0.0" );
+    @Column
+    private BigDecimal money = new BigDecimal( "0.0000" ).setScale( 4 );
 
     /**
      * Contructor. Needs for JAXB.
@@ -97,6 +109,21 @@ public class User {
     public void setMoney( BigDecimal money ) {
 
         this.money = money;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append( "User [id=" ).append( id );
+        builder.append( ", name=" ).append( name );
+        builder.append( ", money=" ).append( money );
+        builder.append( "]" );
+        return builder.toString();
     }
 
 }
