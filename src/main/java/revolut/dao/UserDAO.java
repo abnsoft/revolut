@@ -56,8 +56,31 @@ public class UserDAO extends GenericDAO {
         } catch (Exception e) {
             LOG.error( "Persist User failed. {}", ReflectionToStringBuilder.toString( user ), e );
             transactionRollback( em );
+        }
+    }
 
-        } finally {
+    /**
+     * Make an {@link User}`s instance managed and persistent.
+     * 
+     * @param user
+     * @throws DAOException
+     */
+    public void mergeUser( User user ) throws DAOException {
+
+        EntityManager em = createEntityManager();
+
+        try {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+
+            em.merge( user );
+
+            tx.commit();
+            em.close();
+
+        } catch (Exception e) {
+            LOG.error( "Persist User failed. {}", ReflectionToStringBuilder.toString( user ), e );
+            transactionRollback( em );
         }
     }
 
@@ -87,8 +110,6 @@ public class UserDAO extends GenericDAO {
         } catch (Exception e) {
             LOG.error( "Getting all Users failed.", e );
             transactionRollback( em );
-
-        } finally {
         }
         return allUsers;
     }
@@ -123,8 +144,6 @@ public class UserDAO extends GenericDAO {
         } catch (Exception e) {
             LOG.error( "Getting User by id [{}] failed.", userId );
             transactionRollback( em );
-
-        } finally {
         }
 
         return allUsers != null && allUsers.size() > 0 ? allUsers.iterator().next() : null;

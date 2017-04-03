@@ -8,7 +8,10 @@
  */
 package revolut.rest;
 
+import java.math.BigDecimal;
+
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,7 +19,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,10 @@ public class RestUser {
 
     private static final Logger LOG = LoggerFactory.getLogger( RestUser.class );
 
+    /**
+     * @param userId
+     * @return
+     */
     @GET
     @Path( "{userId}" )
     @Produces( MediaType.APPLICATION_JSON )
@@ -50,4 +56,36 @@ public class RestUser {
         }
         return user;
     }
+
+    /**
+     * @param userId
+     * @return {@link User}
+     */
+    @PUT
+    @Path( "/add/{userId}/{money}" )
+    public Response handlePutUser( String body, @PathParam( "userId" ) Integer userId,
+            @PathParam( "money" ) String money ) {
+
+        UserService userService = new UserService();
+
+        // find user with userId
+        User user = userService.find( userId );
+
+        if ( user != null && money != null ) {
+            LOG.debug( "PUT Add money[{}] for User={}", money, user );
+
+            //
+            user.setMoney( user.getMoney().add( new BigDecimal( money ) ) );
+            LOG.debug( "User[{}], New Money[{}]", userId, user.getMoney() );
+
+            userService.merge( user );
+
+        } else {
+            throw new WebApplicationException( "User not found", Response.Status.NOT_FOUND );
+        }
+
+        String data = "Message Saved";
+        return Response.status( 200 ).entity( data ).build();
+    }
+
 }

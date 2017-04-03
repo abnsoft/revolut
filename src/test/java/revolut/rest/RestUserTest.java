@@ -14,7 +14,9 @@ package revolut.rest;
 
 import java.math.BigDecimal;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -54,7 +56,7 @@ public class RestUserTest extends JerseyTest {
         return new ResourceConfig( RestUser.class );
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void userNotFound() {
 
@@ -64,7 +66,7 @@ public class RestUserTest extends JerseyTest {
                 Response.Status.NOT_FOUND.getStatusCode() == response.getStatus() );
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void user1FoundStatus() {
 
@@ -77,6 +79,7 @@ public class RestUserTest extends JerseyTest {
 
     }
 
+    @Ignore
     @Test
     public void user1FoundJSON() {
 
@@ -92,8 +95,56 @@ public class RestUserTest extends JerseyTest {
         Assert.assertTrue( "Get User Name.", "Ivan1".equals( userJson.getName() ) );
 
         String money = userJson.getMoney().setScale( 4 ).toString();
-        LOG.debug( "money=", money );
+        LOG.debug( "money={}", money );
         Assert.assertTrue( "Get User Money.", "1000.0000".equals( money ) );
+
+    }
+
+//    @Ignore
+    @Test
+    public void user2AddMoney() {
+
+        String response = target( "/user/2" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+
+        LOG.debug( "user/2 Response={}", ReflectionToStringBuilder.toString( response ) );
+
+        Gson gson = new Gson();
+
+        User userJson = gson.fromJson( response, User.class );
+
+        Assert.assertTrue( "Get User ID.", userJson.getId() == 2 );
+
+        Assert.assertTrue( "Get User Name.", "Ivan2".equals( userJson.getName() ) );
+
+        String money = userJson.getMoney().setScale( 4 ).toString();
+        LOG.debug( "money={}", money );
+        Assert.assertTrue( "Get User Money.", "2000.0000".equals( money ) );
+
+        // add money 
+        Form form = new Form();
+
+        Response response2 = target( "/user/add/2/200" ) //
+                .request() //
+                .put( Entity.entity( form, MediaType.APPLICATION_FORM_URLENCODED_TYPE ) );
+
+        LOG.debug( "PUT user Response={}", ReflectionToStringBuilder.toString( response2 ) );
+
+        Assert.assertEquals( "PUT money. Status CODE.", Response.Status.OK.getStatusCode(),
+                response2.getStatus() );
+
+        // check out new value 
+        response = target( "/user/2" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+
+        LOG.debug( "New Value : user/2 Response={}", ReflectionToStringBuilder.toString( response ) );
+
+        gson = new Gson();
+        userJson = gson.fromJson( response, User.class );
+
+        Assert.assertTrue( "Get User ID.", userJson.getId() == 2 );
+
+        money = userJson.getMoney().setScale( 4 ).toString();
+        LOG.debug( "new money={}", money );
+        Assert.assertTrue( "Get User Money.", "2200.0000".equals( money ) );
 
     }
 

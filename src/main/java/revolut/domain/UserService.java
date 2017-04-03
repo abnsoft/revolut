@@ -63,4 +63,20 @@ public class UserService {
         }
     }
 
+    /**
+     * Persist user.
+     * 
+     * @param user
+     */
+    public void merge( User user ) {
+
+        UserDAO userDao = new UserDAO();
+        try {
+            userDao.mergeUser( user );
+
+        } catch (DAOException e) {
+            LOG.error( "Merge the User failed. {}", user );
+        }
+    }
+
 }
