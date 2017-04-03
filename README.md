@@ -16,5 +16,17 @@ You need maven. I use version 3.3.9.
 How to run project: 
 
 > java -jar RestTest-0.0.1-SNAPSHOT.jar revolut/Main
+
+
+Server starts at http://localhost:8888
+Status page http://localhost:8888/status 
+
+REST interfaces : 
+
+GET http://localhost:8888/user/{id}
+
+PUT http://localhost:8888/user/add/{id}/{money} 
+
+PUT http://localhost:8888/user/move/{idFrom}/{money}/{idTo} 
 	
  # revolut
