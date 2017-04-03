@@ -100,7 +100,7 @@ public class RestUserTest extends JerseyTest {
 
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void user2AddMoney() {
 
@@ -145,6 +145,56 @@ public class RestUserTest extends JerseyTest {
         money = userJson.getMoney().setScale( 4 ).toString();
         LOG.debug( "new money={}", money );
         Assert.assertTrue( "Get User Money.", "2200.0000".equals( money ) );
+
+    }
+
+//    @Ignore
+    @Test
+    public void user2MoveMoney() {
+
+        String response3 = target( "/user/3" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+        String response4 = target( "/user/4" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+
+        LOG.debug( "user/3 Response={}", ReflectionToStringBuilder.toString( response3 ) );
+        LOG.debug( "user/4 Response={}", ReflectionToStringBuilder.toString( response4 ) );
+
+        Gson gson = new Gson();
+
+        User userJson = gson.fromJson( response3, User.class );
+
+        Assert.assertTrue( "Get User ID.", userJson.getId() == 3 );
+
+        Assert.assertTrue( "Get User Name.", "Ivan3".equals( userJson.getName() ) );
+
+        String money = userJson.getMoney().setScale( 4 ).toString();
+        LOG.debug( "money={}", money );
+        Assert.assertTrue( "Get User Money.", "3000.0000".equals( money ) );
+
+        // add money 
+        Form form = new Form();
+
+        Response response2 = target( "/user/move/3/1000/4" ) //
+                .request() //
+                .put( Entity.entity( form, MediaType.APPLICATION_FORM_URLENCODED_TYPE ) );
+
+        LOG.debug( "PUT user Response={}", ReflectionToStringBuilder.toString( response2 ) );
+
+        Assert.assertEquals( "PUT money. Status CODE.", Response.Status.OK.getStatusCode(),
+                response2.getStatus() );
+
+        // check out new value 
+        response4 = target( "/user/4" ).request( MediaType.APPLICATION_JSON ).get( String.class );
+
+        LOG.debug( "New Value : user/4 Response={}", ReflectionToStringBuilder.toString( response4 ) );
+
+        gson = new Gson();
+        userJson = gson.fromJson( response4, User.class );
+
+        Assert.assertTrue( "Get User ID.", userJson.getId() == 4 );
+
+        money = userJson.getMoney().setScale( 4 ).toString();
+        LOG.debug( "new money={}", money );
+        Assert.assertTrue( "Get User Money.", "5000.0000".equals( money ) );
 
     }
 
