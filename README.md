@@ -33,3 +33,5 @@ PUT http://localhost:8888/user/add/{id}/{money}
 PUT http://localhost:8888/user/move/{idFrom}/{money}/{idTo} 
 	
  # revolut
+
+ mailto: abn.java _AT_ gmail _dot- com
