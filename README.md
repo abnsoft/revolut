@@ -7,8 +7,14 @@ It uses :
 - maven, 
 - JUnit & Jersey test framework for testing REST.
 
-	It was created in Eclipse Neon 3 as maven project.
+It was created in Eclipse Neon 3 as maven project.
 	
-	How to run project: 
+Building: 
+You need maven. I use version 3.3.9.
+> mvn clean install 
+
+How to run project: 
+
+> java -jar RestTest-0.0.1-SNAPSHOT.jar revolut/Main
 	
  # revolut
