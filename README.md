@@ -6,8 +6,11 @@ It uses :
 - H2 database in memory, 
 - maven, 
 - JUnit & Jersey test framework for testing REST.
+- Logback-classic
 
 It was created in Eclipse Neon 3 as maven project.
+
+Logging level is TRACE. You can change it if u need in the logback.xml file.
 	
 Building: 
 You need maven. I use version 3.3.9.
@@ -15,7 +18,7 @@ You need maven. I use version 3.3.9.
 
 How to run project: 
 
-> java -jar RestTest-0.0.1-SNAPSHOT.jar revolut/Main
+> java -jar RestTest-0.0.1-SNAPSHOT.jar
 
 
 Server starts at http://localhost:8888
