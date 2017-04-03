@@ -12,6 +12,8 @@
  */
 package revolut.domain;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +79,25 @@ public class UserService {
         } catch (DAOException e) {
             LOG.error( "Merge the User failed. {}", user );
         }
+    }
+
+    /**
+     * Move money between users accounts.
+     * 
+     * @param fromUser
+     * @param toUser
+     * @param money
+     */
+    public void moveMoney( User fromUser, User toUser, String money ) {
+
+        UserDAO userDao = new UserDAO();
+        try {
+            userDao.moveMoney( fromUser, toUser, new BigDecimal( money ) );
+
+        } catch (DAOException e) {
+            LOG.error( "Move money failed.", e );
+        }
+
     }
 
 }

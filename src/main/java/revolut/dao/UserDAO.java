@@ -12,6 +12,7 @@
  */
 package revolut.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import revolut.domain.User;
 import revolut.exception.DAOException;
+import revolut.exception.NegativeMoneyException;
 
 /**
  * 
@@ -147,6 +149,52 @@ public class UserDAO extends GenericDAO {
         }
 
         return allUsers != null && allUsers.size() > 0 ? allUsers.iterator().next() : null;
+    }
+
+    /**
+     * Move money between Users in one transaction.
+     * 
+     * @param from
+     * @param to
+     * @param money
+     * 
+     * @throws DAOException
+     */
+    public void moveMoney( User from, User to, BigDecimal money ) throws DAOException {
+
+        EntityManager em = createEntityManager();
+
+        
+        try {
+
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+
+            BigDecimal fromUserNewMoney = from.getMoney().subtract( money ).setScale( 4 );
+
+            if ( fromUserNewMoney.floatValue() > 0 ) {
+                // new value of money
+                from.setMoney( fromUserNewMoney );
+
+                // new value receiver balance 
+                to.setMoney( to.getMoney().add( money ) );
+
+                em.merge( from );
+                em.merge( to );
+
+            } else {
+                throw new NegativeMoneyException(
+                        "User[" + from.getId() + "] has low balance. It is not enougth to transfer money. " );
+            }
+
+            tx.commit();
+            em.close();
+
+        } catch (Exception e) {
+            LOG.error( "Move money failed", e );
+            transactionRollback( em );
+        }
+
     }
 
 }

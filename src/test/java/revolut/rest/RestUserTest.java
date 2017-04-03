@@ -56,7 +56,7 @@ public class RestUserTest extends JerseyTest {
         return new ResourceConfig( RestUser.class );
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void userNotFound() {
 
@@ -66,7 +66,7 @@ public class RestUserTest extends JerseyTest {
                 Response.Status.NOT_FOUND.getStatusCode() == response.getStatus() );
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void user1FoundStatus() {
 
@@ -79,7 +79,7 @@ public class RestUserTest extends JerseyTest {
 
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void user1FoundJSON() {
 
@@ -100,7 +100,7 @@ public class RestUserTest extends JerseyTest {
 
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void user2AddMoney() {
 
@@ -170,7 +170,7 @@ public class RestUserTest extends JerseyTest {
         LOG.debug( "money={}", money );
         Assert.assertTrue( "Get User Money.", "3000.0000".equals( money ) );
 
-        // add money 
+        // move money 
         Form form = new Form();
 
         Response response2 = target( "/user/move/3/1000/4" ) //
