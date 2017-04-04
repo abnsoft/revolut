@@ -1,3 +1,6 @@
+<h1>This project is pass-test for REVOLUT company. </h1>
+<h2>Their decision was : "I regret to inform you that we have decided not to progress further with your application."</h2>
+
 This is REST project based on JDK 8 without using SRPING. 
 It uses :
 - Jetty from command line (main() method), 
