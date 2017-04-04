@@ -1,4 +1,4 @@
-This is REST project based on JDK 8 with out using SRPING. 
+This is REST project based on JDK 8 without using SRPING. 
 It uses :
 - Jetty from command line (main() method), 
 - Jersey (JAX-RS), 
